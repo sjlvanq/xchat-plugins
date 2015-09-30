@@ -9,7 +9,6 @@ import time
 
 print __module_name__+"| Cargado! "
 
-#lun sep 28 17:36:04 ART 2015 Saludos nmobregon!
 #ToDo: Manejo de errores!
 
 interval = 10000
