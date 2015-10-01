@@ -20,16 +20,19 @@ class rss_notificador:
         self.last_entry_published = None
         self.update()
     def update(self):
-        parsed_rss = feedparser.parse(self.feed_url)
-        if self.last_entry_published == None:
+        try:
+            parsed_rss = feedparser.parse(self.feed_url)
+            if self.last_entry_published == None:
+                self.last_entry_published = parsed_rss.entries[0].published_parsed
+            cntx_channel = xchat.find_context(channel=self.channel)
+            #ToDo: if cntx_channel == None: #/server?; /join.......
+            i=0
+            while parsed_rss.entries[i].published_parsed > self.last_entry_published:
+                cntx_channel.command("say "+parsed_rss.feed.title+" | Nuevo mensaje ["+parsed_rss.entries[i].published+"] | "+parsed_rss.entries[i].title+" ("+parsed_rss.entries[i].link+")")
+                i+=1
             self.last_entry_published = parsed_rss.entries[0].published_parsed
-        cntx_channel = xchat.find_context(channel=self.channel)
-        #ToDo: if cntx_channel == None: #/server?; /join.......
-        i=0
-        while parsed_rss.entries[i].published_parsed > self.last_entry_published:
-            cntx_channel.command("say "+parsed_rss.feed.title+" | Nuevo mensaje ["+parsed_rss.entries[i].published+"] | "+parsed_rss.entries[i].title+" ("+parsed_rss.entries[i].link+")")
-            i+=1
-        self.last_entry_published = parsed_rss.entries[0].published_parsed
+        except:
+            pass
 
 #Unload Callback
 def unload_cb(arg):
