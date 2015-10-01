@@ -11,7 +11,7 @@ print __module_name__+"| Cargado! "
 
 #ToDo: Manejo de errores!
 
-interval = 10000
+interval = 30000
 
 class rss_notificador:
     def __init__(self, feed_url, channel="#huayragnulinux"):
