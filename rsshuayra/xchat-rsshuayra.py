@@ -22,6 +22,7 @@ class rss_notificador:
     def update(self):
         try:
             parsed_rss = feedparser.parse(self.feed_url)
+            if parsed_rss.entries == []: exit()
             if self.last_entry_published == None:
                 self.last_entry_published = parsed_rss.entries[0].published_parsed
             cntx_channel = xchat.find_context(channel=self.channel)
@@ -32,7 +33,7 @@ class rss_notificador:
                 i+=1
             self.last_entry_published = parsed_rss.entries[0].published_parsed
         except:
-            pass
+            exit()
 
 #Unload Callback
 def unload_cb(arg):
