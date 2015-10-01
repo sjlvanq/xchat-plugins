@@ -11,10 +11,11 @@ print __module_name__+"| Cargado! "
 
 #ToDo: Manejo de errores!
 
-interval = 30000
+interval = 180000
 
 class rss_notificador:
     def __init__(self, feed_url, channel="#huayragnulinux"):
+        print "DBG __init__"
         self.feed_url = feed_url
         self.channel = channel
         self.last_entry_published = None
@@ -23,17 +24,17 @@ class rss_notificador:
         try:
             parsed_rss = feedparser.parse(self.feed_url)
             if parsed_rss.entries == []: exit()
-            if self.last_entry_published == None:
+            if self.last_entry_published == None: #__init__.update()
                 self.last_entry_published = parsed_rss.entries[0].published_parsed
             cntx_channel = xchat.find_context(channel=self.channel)
-            #ToDo: if cntx_channel == None: #/server?; /join.......
+            if cntx_channel == None: exit() #/server?; /join.......
             i=0
             while parsed_rss.entries[i].published_parsed > self.last_entry_published:
                 cntx_channel.command("say "+parsed_rss.feed.title+" | Nuevo mensaje ["+parsed_rss.entries[i].published+"] | "+parsed_rss.entries[i].title+" ("+parsed_rss.entries[i].link+")")
                 i+=1
             self.last_entry_published = parsed_rss.entries[0].published_parsed
         except:
-            exit()
+            pass
 
 #Unload Callback
 def unload_cb(arg):
